@@ -9,47 +9,90 @@ import type {
   IDeleteFilmSuccessResponse,
   IChangeFilmStatusSuccessResponse,
 } from "./types";
+import { getErrorMessage } from "../utils/errorUtils";
 
 const BASE_URL = "http://localhost:3000";
 
+export default class FilmsService implements FilmsAPI {
+  private static instance: FilmsService;
+  private constructor() {}
 
+  static getInstance(): FilmsService {
+    if (!FilmsService.instance) {
+      FilmsService.instance = new FilmsService();
+    }
+    return FilmsService.instance;
+  }
 
-class FilmsService implements FilmsAPI {
   async getFilms({ body }: IGetFilmsRequest): IGetFilmsSuccessResponse {
-    const response = await fetch(BASE_URL + "/getFilms", {
+    try{
+      const response = await fetch(BASE_URL + "/getFilms", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(body),
     });
+    if (!response.ok) {
+      alert('Ошибка сервера');
+    }
     return response.json();
-  }
+  } catch(err) {
+    const message = getErrorMessage(err);
+    throw new Error(`Не удалось получить список фильмов ${message}`, { cause: err });
+  }}
 
   async createFilm({ body }: ICreateFilmRequest): ICreateFilmSuccessResponse {
-    const response = await fetch(BASE_URL + "/createFilm", {
+    try{
+      const response = await fetch(BASE_URL + "/createFilm", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(body),
     });
+    if (!response.ok) {
+      alert("Ошибка сервера");
+    }
     return response.json();
+  } catch (err) {
+    const message = getErrorMessage(err);
+    throw new Error(`Не удалось создать фильм ${message}`, { cause: err });
   }
+}
 
   async updateFilm({
     body,
     id,
   }: IUpdateFilmRequest): IUpdateFilmSuccessResponse {
-    const response = await fetch(BASE_URL + `/updateFilm/${id}`, {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(body),
-    });
-    return response.json();
+    try {
+      const response = await fetch(BASE_URL + `/updateFilm/${id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body),
+      });
+      if (!response.ok) {
+        alert("Ошибка сервера");
+      }
+      return response.json();
+    } catch (err) {
+      const message = getErrorMessage(err);
+      throw new Error(`Не удалось обновить фильм ${id}, ${message}`, { cause: err });
+    }
   }
 
+
   async deleteFilm({ id }: { id: string }): IDeleteFilmSuccessResponse {
-    const response = await fetch(BASE_URL + `/deleteFilm/${id}`, {
-      method: "DELETE",
-    });
-    return response.json();
+    try {
+      const response = await fetch(BASE_URL + `/deleteFilm/${id}`, {
+        method: "DELETE",
+      });
+      if (!response.ok) {
+        alert("Ошибка сервера");
+      }
+      return response.json();
+    } catch (err) {
+      const message = getErrorMessage(err);
+      throw new Error(`Не удалось удалить фильм ${id}, ${message}`, {
+        cause: err,
+      });
+    }
   }
 
   async changeFilmStatus({
@@ -58,12 +101,23 @@ class FilmsService implements FilmsAPI {
   }: {
     body: { status: EStatus };
     id: string;
-  }): IChangeFilmStatusSuccessResponse{
+  }): IChangeFilmStatusSuccessResponse {
+    try{
     const response = await fetch(BASE_URL + `/changeFilmStatus/${id}`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(body),
     });
+    if (!response.ok) {
+        alert("Ошибка сервера");
+      }
     return response.json();
-  }
+  }catch (err) {
+      const message = getErrorMessage(err);
+      throw new Error(`Не удалось поменять фильм ${id}, ${message}`, {
+        cause: err,
+      });
+    }
 }
+}
+
