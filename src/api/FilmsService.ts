@@ -1,4 +1,4 @@
-import type { FilmsAPI, EStatus } from "@yp-mentor/films-server-types";
+import type { FilmsAPI } from "@yp-mentor/films-server-types";
 import type {
   IGetFilmsRequest,
   IGetFilmsSuccessResponse,
@@ -9,53 +9,43 @@ import type {
   IDeleteFilmSuccessResponse,
   IChangeFilmStatusSuccessResponse,
 } from "./types";
-import { getErrorMessage } from "../utils/errorUtils";
+import {
+  EGenre,
+  EStatus,
+  ESortOrder,
+  ESortField,
+} from "@yp-mentor/films-server-types";
+
 
 const BASE_URL = "http://localhost:3000";
 
 export default class FilmsService implements FilmsAPI {
-  private static instance: FilmsService;
-  private constructor() {}
-
-  static getInstance(): FilmsService {
-    if (!FilmsService.instance) {
-      FilmsService.instance = new FilmsService();
+  
+  async getFilms({ body }: IGetFilmsRequest): IGetFilmsSuccessResponse{
+      const response: Response = await fetch(BASE_URL + "/getFilms", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body),
+      });
+      return checkResponse<IGetFilmsSuccessResponse>(response)
     }
-    return FilmsService.instance;
-  }
-
-  async getFilms({ body }: IGetFilmsRequest): IGetFilmsSuccessResponse {
-    try{
-      const response = await fetch(BASE_URL + "/getFilms", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(body),
-    });
-    if (!response.ok) {
-      alert('Ошибка сервера');
-    }
-    return response.json();
-  } catch(err) {
-    const message = getErrorMessage(err);
-    throw new Error(`Не удалось получить список фильмов ${message}`, { cause: err });
-  }}
 
   async createFilm({ body }: ICreateFilmRequest): ICreateFilmSuccessResponse {
-    try{
+    try {
       const response = await fetch(BASE_URL + "/createFilm", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(body),
-    });
-    if (!response.ok) {
-      alert("Ошибка сервера");
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body),
+      });
+      if (!response.ok) {
+        alert("Ошибка сервера");
+      }
+      return response.json();
+    } catch (err) {
+      const message = getErrorMessage(err);
+      throw new Error(`Не удалось создать фильм ${message}`, { cause: err });
     }
-    return response.json();
-  } catch (err) {
-    const message = getErrorMessage(err);
-    throw new Error(`Не удалось создать фильм ${message}`, { cause: err });
   }
-}
 
   async updateFilm({
     body,
@@ -73,10 +63,11 @@ export default class FilmsService implements FilmsAPI {
       return response.json();
     } catch (err) {
       const message = getErrorMessage(err);
-      throw new Error(`Не удалось обновить фильм ${id}, ${message}`, { cause: err });
+      throw new Error(`Не удалось обновить фильм ${id}, ${message}`, {
+        cause: err,
+      });
     }
   }
-
 
   async deleteFilm({ id }: { id: string }): IDeleteFilmSuccessResponse {
     try {
@@ -102,22 +93,31 @@ export default class FilmsService implements FilmsAPI {
     body: { status: EStatus };
     id: string;
   }): IChangeFilmStatusSuccessResponse {
-    try{
-    const response = await fetch(BASE_URL + `/changeFilmStatus/${id}`, {
-      method: "PATCH",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(body),
-    });
-    if (!response.ok) {
+    try {
+      const response = await fetch(BASE_URL + `/changeFilmStatus/${id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body),
+      });
+      if (!response.ok) {
         alert("Ошибка сервера");
       }
-    return response.json();
-  }catch (err) {
+      return response.json();
+    } catch (err) {
       const message = getErrorMessage(err);
       throw new Error(`Не удалось поменять фильм ${id}, ${message}`, {
         cause: err,
       });
     }
-}
-}
+  }
 
+
+  async checkResponse<T>(response: Response): Promise<T>{
+      const data = await response.json();
+      if (!response.ok) {
+        throw new Error(data.errorMessage);
+      }
+      return data as T
+  }}
+
+export default new FilmsService();
