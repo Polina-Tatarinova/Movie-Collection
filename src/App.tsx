@@ -1,13 +1,17 @@
-import FilmsService from './api/FilmsService'
-import './App.css'
+import { Header } from './components/Header/Header'
+
 
 function App() {
 
   return (
-    <div>
-      {const service = FilmsService.getInstance()}
-      {service.getFilms({ body })}
-    </div>
+    <>
+    <Header
+    // alt={'изображение логотипа в виде киноленты'}
+    // totalMovies={8}
+    // watchedMovies={4} 
+    // averageRating={8.6}
+    />
+    </>
   )
 }
 

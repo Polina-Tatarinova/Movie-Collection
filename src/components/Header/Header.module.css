@@ -1,0 +1,50 @@
+.header {
+  min-height: 100px;
+  background-color: #ffff;
+  padding: 26px 31px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.headerBrand {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  align-items: center;
+}
+
+.headerLogo {
+  width: 48px;
+  height: 48px;
+}
+
+.headerTitle {
+  font-weight: bold;
+}
+
+.headerStats {
+  display: flex;
+  justify-content: space-between;
+  gap: 43px;
+}
+
+.headerStat {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.headerStatValue {
+  font-size: 32px;
+  font-weight: bold;
+  color: #1e1e1e;
+  margin: 0;
+}
+
+.headerStatLabel {
+  font-size: 16px;
+  font-weight: 400;
+  color: #757575;
+  margin: 0;
+}

@@ -1,4 +1,4 @@
-import type { FilmsAPI } from "@yp-mentor/films-server-types";
+import type { FilmsAPI, EStatus } from "@yp-mentor/films-server-types";
 import type {
   IGetFilmsRequest,
   IGetFilmsSuccessResponse,
@@ -9,12 +9,9 @@ import type {
   IDeleteFilmSuccessResponse,
   IChangeFilmStatusSuccessResponse,
 } from "./types";
-import { EStatus } from "@yp-mentor/films-server-types";
 
 const BASE_URL = "http://localhost:3000";
-
 export class FilmsService implements FilmsAPI {
-
   async getFilms({ body }: IGetFilmsRequest): IGetFilmsSuccessResponse {
     const response: Response = await fetch(BASE_URL + "/getFilms", {
       method: "POST",
@@ -25,35 +22,31 @@ export class FilmsService implements FilmsAPI {
   }
 
   async createFilm({ body }: ICreateFilmRequest): ICreateFilmSuccessResponse {
-      const response = await fetch(BASE_URL + "/createFilm", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(body),
-      });
-      return this.checkResponse(response);
-    } 
-  
+    const response = await fetch(BASE_URL + "/createFilm", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(body),
+    });
+    return this.checkResponse(response);
+  }
 
   async updateFilm({
     body,
     id,
   }: IUpdateFilmRequest): IUpdateFilmSuccessResponse {
-    
-      const response = await fetch(BASE_URL + `/updateFilm/${id}`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(body),
-      });
-      return this.checkResponse(response);
-    } 
-  
+    const response = await fetch(BASE_URL + `/updateFilm/${id}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(body),
+    });
+    return this.checkResponse(response);
+  }
 
   async deleteFilm({ id }: { id: string }): IDeleteFilmSuccessResponse {
- 
-      const response = await fetch(BASE_URL + `/deleteFilm/${id}`, {
-        method: "DELETE",
-      });
-      return this.checkResponse(response);
+    const response = await fetch(BASE_URL + `/deleteFilm/${id}`, {
+      method: "DELETE",
+    });
+    return this.checkResponse(response);
   }
 
   async changeFilmStatus({
@@ -63,16 +56,15 @@ export class FilmsService implements FilmsAPI {
     body: { status: EStatus };
     id: string;
   }): IChangeFilmStatusSuccessResponse {
-    
-      const response = await fetch(BASE_URL + `/changeFilmStatus/${id}`, {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(body),
-      });
-      return this.checkResponse(response);
+    const response = await fetch(BASE_URL + `/changeFilmStatus/${id}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(body),
+    });
+    return this.checkResponse(response);
   }
 
-  async checkResponse<T>(response: Response): Promise<T> {
+  private async checkResponse<T>(response: Response): Promise<T> {
     const data = await response.json();
     if (!response.ok) {
       throw new Error(data.errorMessage);
