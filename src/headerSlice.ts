@@ -2,15 +2,15 @@ import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
 
 interface MainState {
-  totalMovies: number;
-  watchedMovies: number;
-  averageRating: number;
+  totalMovies: null;
+  watchedMovies: null;
+  averageRating: null;
 }
 
 const initialState: MainState = {
-  totalMovies: 0,
-  watchedMovies: 0,
-  averageRating: 0,
+  totalMovies: null,
+  watchedMovies: null,
+  averageRating: null,
 };
 
 

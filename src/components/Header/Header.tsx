@@ -14,7 +14,7 @@ type HeaderProps = {
 };
 
 export function Header({ alt }: HeaderProps) {
-const [loading, setLoading] = useState(false);
+const [loading, setLoading] = useState(true);
   const { totalMovies, watchedMovies, averageRating } = useAppSelector(
     (state) => state.headerSlice,
   );
@@ -22,7 +22,7 @@ const [loading, setLoading] = useState(false);
   useEffect(() => {
     FilmsService.getFilms({
       body: {
-        pagination: { page: 1, pageSize: 1000 },
+        pagination: { page: 1, pageSize: 100 },
       },
     })
       .then((response) => {
@@ -39,7 +39,7 @@ const [loading, setLoading] = useState(false);
       });
   }, [dispatch]);
 
-  if (loading) {
+  if (!loading) {
     return (
       <header className={styles.header}>
         <div className={styles.headerBrand}>
