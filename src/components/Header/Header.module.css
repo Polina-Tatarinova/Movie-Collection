@@ -28,6 +28,7 @@
   gap: 43px;
 }
 
+
 .headerStat {
   display: flex;
   flex-direction: column;
@@ -42,9 +43,25 @@
   margin: 0;
 }
 
+.headerStatValueSkeleton{
+    width: 26px;
+    height: 26px;
+    background-color: #EDEDED;
+    border-radius: 100px;
+    margin: 0;
+}
+
 .headerStatLabel {
   font-size: 16px;
   font-weight: 400;
   color: #757575;
   margin: 0;
+}
+
+.headerStatLabelSkeleton{
+    width: 122px;
+    height: 26px;
+    background-color: #EDEDED;
+    border-radius: 8px;
+    margin-top:  5px;
 }
