@@ -11,11 +11,10 @@ import FilmsService from "../../api/FilmsService";
 
 type HeaderProps = {
   alt: string;
-//   loading?: boolean;
 };
 
 export function Header({ alt }: HeaderProps) {
-const { loading, setLoading } = useState(false);
+const [loading, setLoading] = useState(false);
   const { totalMovies, watchedMovies, averageRating } = useAppSelector(
     (state) => state.headerSlice,
   );
@@ -27,18 +26,18 @@ const { loading, setLoading } = useState(false);
       },
     })
       .then((response) => {
-        setLoading(false)
+        setLoading(false);
         const { statistic } = response;
         dispatch(setTotalMovies(statistic.total));
         dispatch(setWatchedMovies(statistic.watched));
         dispatch(setAverageRating(statistic.averageRating));
       })
       .catch((err) => {
-        setLoading(true)
+        setLoading(true);
         console.error("Ошибка загрузки фильмов:", err);
         alert("Ошибка загрузки фильмов");
       });
-  });
+  }, [dispatch]);
 
   if (loading) {
     return (

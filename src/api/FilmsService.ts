@@ -10,7 +10,7 @@ import type {
   IChangeFilmStatusSuccessResponse,
 } from "./types";
 
-const BASE_URL = "http://localhost:3000";
+const BASE_URL = "http://localhost:3000/api-docs";
 export class FilmsService implements FilmsAPI {
   async getFilms({ body }: IGetFilmsRequest): IGetFilmsSuccessResponse {
     const response: Response = await fetch(BASE_URL + "/getFilms", {
