@@ -1,9 +1,9 @@
 import { configureStore } from "@reduxjs/toolkit";
-import  headerSlice  from "./headerSlice";
+import headerSlice from "./slice/headerSlice";
 
 export const store = configureStore({
   reducer: {
-    headerSlice
+    headerSlice,
   },
 });
 export type RootState = ReturnType<typeof store.getState>;

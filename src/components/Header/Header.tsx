@@ -5,7 +5,7 @@ import {
   setTotalMovies,
   setWatchedMovies,
   setAverageRating,
-} from "../../headerSlice";
+} from "../../slice/headerSlice";
 import { useEffect, useState } from "react";
 import FilmsService from "../../api/FilmsService";
 
@@ -14,7 +14,7 @@ type HeaderProps = {
 };
 
 export function Header({ alt }: HeaderProps) {
-const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(true);
   const { totalMovies, watchedMovies, averageRating } = useAppSelector(
     (state) => state.headerSlice,
   );
